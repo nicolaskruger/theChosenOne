@@ -10,6 +10,7 @@
 #define NOTE_B4 493
 #define NOTE_C5 523
 #define NOTE_D5 587
+#define NOTE_B3 247
 
 // const
 const int showPins[] = {D7, D6, D5};
@@ -24,94 +25,24 @@ int countShowTime = 0;
 bool show = false;
 bool activeBuzzer = false;
 
-// Melodia do tema principal (simplificada)
+// Melodia do tema principal de Final Fantasy (simplificada)
 int melody[] = {
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_G4,
-    NOTE_E4,
-    NOTE_C5,
-    NOTE_B4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_G4,
-    NOTE_E4,
-    NOTE_C5,
-    NOTE_B4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_G4,
-    NOTE_E4,
-    NOTE_C5,
-    NOTE_B4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_G4,
-    NOTE_E4,
-    NOTE_C5,
-    NOTE_B4,
-};
+    NOTE_C4, NOTE_E4, NOTE_G4, NOTE_A4,
+    NOTE_G4, NOTE_E4, NOTE_C4, NOTE_E4,
+    NOTE_G4, NOTE_A4, NOTE_G4, NOTE_E4,
+    NOTE_C4, NOTE_A4, NOTE_G4, NOTE_E4,
+    NOTE_C4, NOTE_D4, NOTE_E4, NOTE_C4,
+    NOTE_B3};
 
 // Duração de cada nota (em milissegundos)
 int noteDurations[] = {
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    400,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    400,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    400,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    200,
-    400,
-};
+    400, 400, 400, 400, 400, 400, 400,
+    400, 400, 400, 400, 400,
+    400, 400, 400, 400,
+    400, 400, 400, 800};
 
 int currentTime = 0;
-const int noteSize = 40;
+const int noteSize = 21;
 int currentNote;
 
 // put function declarations here:
