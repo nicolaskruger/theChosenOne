@@ -9,7 +9,9 @@
 #define NOTE_A4 440
 #define NOTE_B4 493
 #define NOTE_C5 523
+#define NOTE_E5 659
 #define NOTE_D5 587
+#define NOTE_G5 784
 #define NOTE_B3 247
 
 // const
@@ -25,24 +27,69 @@ int countShowTime = 0;
 bool show = false;
 bool activeBuzzer = false;
 
-// Melodia do tema principal de Final Fantasy (simplificada)
 int melody[] = {
-    NOTE_C4, NOTE_E4, NOTE_G4, NOTE_A4,
-    NOTE_G4, NOTE_E4, NOTE_C4, NOTE_E4,
-    NOTE_G4, NOTE_A4, NOTE_G4, NOTE_E4,
-    NOTE_C4, NOTE_A4, NOTE_G4, NOTE_E4,
-    NOTE_C4, NOTE_D4, NOTE_E4, NOTE_C4,
-    NOTE_B3};
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_C5,
+    NOTE_E5,
+    NOTE_G5,
+    NOTE_C5,
+    NOTE_D5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_C5,
+    NOTE_E5,
+    NOTE_G5,
+    NOTE_C5,
+    NOTE_D5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_E5,
+    NOTE_C5,
+    NOTE_E5,
+    NOTE_G5,
+    NOTE_C5,
+    NOTE_D5,
+    NOTE_E5,
+};
 
 // Duração de cada nota (em milissegundos)
 int noteDurations[] = {
-    400, 400, 400, 400, 400, 400, 400,
-    400, 400, 400, 400, 400,
-    400, 400, 400, 400,
-    400, 400, 400, 800};
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+    300,
+};
 
 int currentTime = 0;
-const int noteSize = 21;
+const int noteSize = 27;
 int currentNote;
 
 // put function declarations here:
