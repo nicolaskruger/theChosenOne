@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+// Definindo as frequências das notas
 #define NOTE_C4 261
 #define NOTE_D4 294
 #define NOTE_E4 329
@@ -8,6 +9,7 @@
 #define NOTE_A4 440
 #define NOTE_B4 493
 #define NOTE_C5 523
+#define NOTE_D5 587
 
 // const
 const int showPins[] = {D7, D6, D5};
@@ -22,24 +24,24 @@ int countShowTime = 0;
 bool show = false;
 bool activeBuzzer = false;
 
-// Melodia da música de Zelda (introdução)
-const int melody[] = {
-    NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5, // Primeiras notas
-    NOTE_B4, NOTE_A4, NOTE_G4, NOTE_A4, // Seguintes notas
-    NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5, // Repetição
-    NOTE_B4, NOTE_A4, NOTE_G4, NOTE_E4  // Fim
-};
+// Melodia do tema principal (simplificada)
+int melody[] = {
+    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4,
+    NOTE_G4, NOTE_E4, NOTE_G4, NOTE_A4,
+    NOTE_B4, NOTE_C5, NOTE_D5, NOTE_C5,
+    NOTE_B4, NOTE_A4, NOTE_G4, NOTE_E4,
+    NOTE_C4, NOTE_E4, NOTE_A4};
 
 // Duração de cada nota (em milissegundos)
-const int noteDurations[] = {
-    300, 300, 300, 600, // Duração das primeiras notas
-    300, 300, 300, 600, // Seguintes
-    300, 300, 300, 600, // Repetição
-    300, 300, 300, 600  // Fim
-};
+int noteDurations[] = {
+    300, 300, 600, 150,
+    150, 300, 300, 300,
+    300, 300, 300, 300,
+    300, 300, 300, 300,
+    300, 300, 600};
 
 int currentTime = 0;
-const int noteSize = 16;
+const int noteSize = 19;
 int currentNote;
 
 // put function declarations here:
