@@ -11,11 +11,9 @@ const auto state_error = 2;
 
 auto state = state_question;
 
-void (*state_array[3])();
-
 const auto success_button = D5, error_button = D7;
 
-const char *message_question[] = {"Voce aceita ?"};
+const char *message_question[] = {"Voce aceita ?", ""};
 const char *message_success[] = {"Resposta certa!", "Parabens!!!"};
 const char *message_error[] = {"Voce errou,", "Tente novamente!"};
 
@@ -27,14 +25,17 @@ const int delayFps = 1000 / fps;
 const int rs = D8, en = D6, d4 = D3, d5 = D2, d6 = D1, d7 = D0;
 
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-// put function declarations here:
 
 void question();
 void error();
 void success();
 
+void (*state_array[3])() = {question, success, error};
+
 void print_message_tx(const char *message[]);
 void set_up_state();
+
+const auto arr_size = 10;
 
 void setup()
 {
@@ -43,13 +44,12 @@ void setup()
 
   lcd.begin(16, 2);
   print_message_tx(message_question);
-
-  // lcd.cursor();
 }
 
 void loop()
 {
   delay(delayFps);
+
   state_array[state]();
 }
 
@@ -57,10 +57,6 @@ void set_up_state()
 {
   pinMode(success_button, INPUT_PULLUP);
   pinMode(error_button, INPUT_PULLUP);
-
-  state_array[state_question] = question;
-  state_array[state_success] = success;
-  state_array[state_error] = error;
 }
 
 bool countTime(int *count, int max)
@@ -74,24 +70,25 @@ bool countTime(int *count, int max)
   return false;
 }
 
-auto readButtons()
-{
-  int arr[] = {digitalRead(success_button), digitalRead(error_button)};
-  return arr;
-}
+bool one_error = true;
 
 void question()
 {
-  auto [s_button, e_button] = *reinterpret_cast<int(*)[2]>(readButtons());
-  if (!s_button)
+  const auto s_button = digitalRead(success_button);
+  const auto e_button = digitalRead(error_button);
+
+  if (s_button == LOW)
   {
     print_message_tx(message_success);
     state = state_success;
+    return;
   }
-  if (true)
+  if (e_button == LOW && one_error)
   {
+    one_error = false;
     print_message_tx(message_error);
     state = state_error;
+    return;
   }
   return;
 }
@@ -103,11 +100,10 @@ void success()
 }
 
 auto count_error = 0;
-auto count_out_error = 0;
 
 void error()
 {
-  if (countTime(&count_question, 3000))
+  if (countTime(&count_error, 3000))
   {
     print_message_tx(message_question);
     state = state_question;
@@ -117,7 +113,7 @@ void error()
 void print_message_tx(const char *message[])
 {
   lcd.clear();
-  int lines = 1;
+  int lines = 2;
   for (auto line = 0; line < lines; line++)
   {
     lcd.setCursor(0, line);
