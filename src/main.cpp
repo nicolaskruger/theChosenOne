@@ -1,109 +1,126 @@
 #include <Arduino.h>
+#include <LiquidCrystal.h>
 #include "melody/zelda_melody.h"
-
 // Definindo as frequências das notas
 
 // const
-const int showPins[] = {D7, D6, D5};
+
+const auto state_question = 0;
+const auto state_success = 1;
+const auto state_error = 2;
+
+auto state = state_question;
+
+void (*state_array[3])();
+
+const auto success_button = D5, error_button = D7;
+
+const char *message_question[] = {"Voce aceita ?"};
+const char *message_success[] = {"Resposta certa!", "Parabens!!!"};
+const char *message_error[] = {"Voce errou,", "Tente novamente!"};
+
+auto count_question = 0;
+
 const int fps = 60;
 const int delayFps = 1000 / fps;
-const int maxShowTime = 20;
-const int buttonPin = D0;
-const int buzzerPin = D1;
 
-// variable
-int countShowTime = 0;
-bool show = false;
-bool activeBuzzer = false;
+const int rs = D8, en = D6, d4 = D3, d5 = D2, d6 = D1, d7 = D0;
 
-int currentTime = 0;
-int currentNote;
-
-
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 // put function declarations here:
 
-void setUpShow();
-void setUpButton();
-void setUpBuzzer();
+void question();
+void error();
+void success();
 
-void itIsShowTime();
-
-void lightShow();
-void buzzerShow();
-void activeShow();
+void print_message_tx(const char *message[]);
+void set_up_state();
 
 void setup()
 {
-  // put your setup code here, to run once:
-  setUpShow();
-  setUpButton();
-  setUpBuzzer();
+
+  void set_up_state();
+
+  lcd.begin(16, 2);
+  print_message_tx(message_question);
+
+  // lcd.cursor();
 }
 
 void loop()
 {
   delay(delayFps);
-  activeShow();
-  if (show)
-    itIsShowTime();
-  // put your main code here, to run repeatedly:
+  state_array[state]();
 }
 
-// put function definitions here:
-void setUpShow()
+void set_up_state()
 {
-  for (auto &&pin : showPins)
+  pinMode(success_button, INPUT_PULLUP);
+  pinMode(error_button, INPUT_PULLUP);
+
+  state_array[state_question] = question;
+  state_array[state_success] = success;
+  state_array[state_error] = error;
+}
+
+bool countTime(int *count, int max)
+{
+  *count += delayFps;
+  if (*count >= max)
   {
-    pinMode(pin, OUTPUT);
+    *count = 0;
+    return true;
   }
-  randomSeed(analogRead(0));
+  return false;
 }
 
-void setUpBuzzer()
+auto readButtons()
 {
-  pinMode(buzzerPin, OUTPUT);
+  int arr[] = {digitalRead(success_button), digitalRead(error_button)};
+  return arr;
 }
 
-void setUpButton()
+void question()
 {
-  pinMode(buttonPin, INPUT_PULLUP);
-}
-
-void lightShow()
-{
-  countShowTime++;
-  if (countShowTime < maxShowTime)
+  auto [s_button, e_button] = *reinterpret_cast<int(*)[2]>(readButtons());
+  if (!s_button)
   {
-    return;
+    print_message_tx(message_success);
+    state = state_success;
   }
-  countShowTime = 0;
-  for (auto &&pin : showPins)
+  if (true)
   {
-    digitalWrite(pin, random(2));
+    print_message_tx(message_error);
+    state = state_error;
   }
+  return;
 }
 
-void buzzerShow()
-{
+auto count_success = 0;
 
-  const auto duration = wholeNote / noteDurations[currentNote];
-  if (currentTime >= duration)
+void success()
+{
+}
+
+auto count_error = 0;
+auto count_out_error = 0;
+
+void error()
+{
+  if (countTime(&count_question, 3000))
   {
-    currentTime = 0;
-    currentNote = (currentNote + 1) % noteSize;
+    print_message_tx(message_question);
+    state = state_question;
   }
-  const auto mel = melody[currentNote];
-  tone(buzzerPin, mel);
-  currentTime += delayFps;
 }
 
-void itIsShowTime()
+void print_message_tx(const char *message[])
 {
-  lightShow();
-  buzzerShow();
-}
-
-void activeShow()
-{
-  show = digitalRead(D0) == LOW ? true : show;
+  lcd.clear();
+  int lines = 1;
+  for (auto line = 0; line < lines; line++)
+  {
+    lcd.setCursor(0, line);
+    lcd.print(message[line]);
+  }
 }
